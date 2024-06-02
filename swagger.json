@@ -1,0 +1,1028 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "E-Learning",
+    "description": "Move your app forward with the So-yummy API",
+    "version": "1.0.0"
+  },
+  "host": "https://localhost:3000",
+  "servers": [
+    {
+      "url": "https://localhost:3000"
+    }
+  ],
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json", "multipart/form-data"],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Users",
+      "description": "Users endpoints"
+    },
+    {
+      "name": "Courses",
+      "description": "Courses endpoints"
+    },
+    {
+      "name": "Lessons",
+      "description": "Lessons endpoints"
+    },
+    {
+      "name": "Progress",
+      "description": "Progress endpoints"
+    },
+    {
+      "name": "Quizzes",
+      "description": "Quizzes endpoints"
+    }
+  ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Register a new user with the provided credentials",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegistrationReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRegistrationRes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or missing required fields"
+          },
+          "409": {
+            "description": "Registration conflict error"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "User login",
+        "description": "Authenticate and log in a user with the provided credentials",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLoginRes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or missing required fields"
+          },
+          "401": {
+            "description": "Unauthorized access, invalid credentials"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get list of existing users",
+        "description": "Retrieve information about existing users",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All users information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllUsersRes"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized access, user not logged in"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/:id": {
+      "put": {
+        "summary": "Update user's data",
+        "description": "TO BE IMPLEMENTED",
+        "tags": ["Users"]
+      },
+      "delete": {
+        "summary": "Update user's avatar",
+        "description": "Update the avatar for the current user",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Users Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was deleted successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "User deleted successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or missing required fields"
+          },
+          "401": {
+            "description": "Unauthorized access, user not logged in"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users/:id/completed-lessons": {
+      "get": {
+        "summary": "Completed lessons by user",
+        "description": "Get information about lessons which was completed by user with provided ID",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Users Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Completed lessons information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCompletedLessons"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized access, user not logged in"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/:id/progress": {
+      "get": {
+        "summary": "Completion progress for user",
+        "description": "Get information about user's progress with provided ID",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Users Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User's progress information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProgress"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized access, user not logged in"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/:id/password": {
+      "put": {
+        "summary": "Update user's password",
+        "description": "Update user's password by providing old and new passwords",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Users Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User's progress information retrieved successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "Password updated successfully"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Current password is incorrect"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/:id/quiz-attempts": {
+      "get": {
+        "summary": "Get user's quizzes attempts",
+        "description": "Update user's password by providing old and new passwords",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Users Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User's progress information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserQuizzesAttempts"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Current password is incorrect"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/courses": {
+      "get": {
+        "summary": "Get list of existing courses",
+        "description": "Retrieve information about existing courses",
+        "tags": ["Courses"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All users information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllCourses"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized access, user not logged in"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create course",
+        "description": "Create single course",
+        "tags": ["Courses"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCourse"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "All users information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllCourses"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized access, user not logged in"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/courses/:id": {
+      "get": {
+        "summary": "Get course with provided id",
+        "description": "Retrieve information about course",
+        "tags": ["Courses"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Selected course information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseById"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Course Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update course with provided id",
+        "description": "Update course with new data",
+        "tags": ["Courses"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Course updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateCourseRes"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCourseReq"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Course Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete course with provided id",
+        "description": "Delete course with id",
+        "tags": ["Courses"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Course deleted successfully",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "Course deleted successfully"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Course Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        ]
+      }
+    },
+    "/courses/:id/lessons": {
+      "get": {
+        "summary": "Get lessons for course with id",
+        "description": "Retrieve information about lessons for selected course",
+        "tags": ["Courses"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Selected course information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonsForCourse"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Course Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        ]
+      }
+    },
+    "/courses/:id/enrolled-users": {
+      "get": {
+        "summary": "Get enrolled users for course with id",
+        "description": "Retrieve information about enrolled users for selected course",
+        "tags": ["Courses"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Selected course information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersForCourse"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Course Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "int64"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserRegistrationReq": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Nicole"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "example@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "1qazxsw2"
+          }
+        }
+      },
+      "UserRegistrationRes": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Response status",
+            "example": "success"
+          },
+          "code": {
+            "type": "number",
+            "description": "Response code",
+            "example": 201
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "Encrypted user id",
+                "example": "NiceyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YTdjNjVlMjhiMjdjNzYwNzIzNmYyOCIsImlhdCI6MTY4ODcxNjg5NH0.3JFBtNrkKFLIcvnlZr-I8GuIKvCKpuuIH9jsO06z9WQole"
+              },
+              "user": {
+                "type": "object",
+                "properties": {
+                  "userID": {
+                    "type": "string",
+                    "description": "User's id",
+                    "example": "64a92fe68594a3ed540ff468"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "User's name",
+                    "example": "Nicole"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "example": "example@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "UserLoginReq": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "example": "example@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "1qazxsw2"
+          }
+        }
+      },
+      "UserLoginRes": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Response status",
+            "example": "success"
+          },
+          "code": {
+            "type": "number",
+            "description": "Response code",
+            "example": 201
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "Encrypted user id",
+                "example": "NiceyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YTdjNjVlMjhiMjdjNzYwNzIzNmYyOCIsImlhdCI6MTY4ODcxNjg5NH0.3JFBtNrkKFLIcvnlZr-I8GuIKvCKpuuIH9jsO06z9WQole"
+              },
+              "user": {
+                "type": "object",
+                "properties": {
+                  "userID": {
+                    "type": "string",
+                    "description": "User's id",
+                    "example": "64a92fe68594a3ed540ff468"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "User's name",
+                    "example": "Nicole"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "example": "example@gmail.com"
+                  },
+                  "avatarURL": {
+                    "type": "string",
+                    "description": "User's avatar",
+                    "example": "https://res.cloudinary.com/dcfetki7g/image/upload/v1689070757/avatars/IMG_4260.jpg.jpg"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "AllUsersRes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "User's id",
+              "example": "64a92fe68594a3ed540ff468"
+            },
+            "username": {
+              "type": "string",
+              "description": "User's name",
+              "example": "Nicole"
+            },
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "example": "example@gmail.com"
+            },
+            "role": {
+              "type": "string",
+              "description": "User's role",
+              "example": "admin | instructor | user"
+            }
+          }
+        }
+      },
+      "UpdateNameRes": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Response status",
+            "example": "success"
+          },
+          "code": {
+            "type": "number",
+            "description": "Response code",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "User's name",
+                    "example": "Juliet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "UserCompletedLessons": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "8adw098iadjp9u12890sk"
+            },
+            "title": {
+              "type": "string",
+              "example": "Lesson 1"
+            },
+            "content": {
+              "type": "string",
+              "example": "Dummy content"
+            }
+          }
+        }
+      },
+      "UserProgress": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "8adw098iadjp9u12890sk"
+            },
+            "title": {
+              "type": "string",
+              "example": "Lesson 1"
+            },
+            "content": {
+              "type": "string",
+              "example": "Dummy content"
+            }
+          }
+        }
+      },
+      "UserQuizzesAttempts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "8adw098iadjp9u12890sk"
+            },
+            "title": {
+              "type": "string",
+              "example": "Lesson 1"
+            },
+            "content": {
+              "type": "string",
+              "example": "Dummy content"
+            }
+          }
+        }
+      },
+      "AllCourses": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Course id",
+              "example": "64a92fe68594a3ed540ff468"
+            },
+            "title": {
+              "type": "string",
+              "description": "Course title",
+              "example": "English for beginners"
+            },
+            "description": {
+              "type": "string",
+              "description": "Course description",
+              "example": "Dummy course for beginners"
+            },
+            "owner": {
+              "type": "string",
+              "description": "Course owner id",
+              "example": "64a92fe68594a3ed540ff468"
+            },
+            "lessons": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Lesson id",
+                  "example": "awa0w8da0987mn098n"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateCourse": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Course title",
+            "example": "Dummy course title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Course description",
+            "example": "Dummy course description"
+          }
+        }
+      },
+      "CourseById": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Course id",
+            "example": "64a92fe68594a3ed540ff468"
+          },
+          "title": {
+            "type": "string",
+            "description": "Course title",
+            "example": "English for beginners"
+          },
+          "description": {
+            "type": "string",
+            "description": "Course description",
+            "example": "Dummy course for beginners"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Course owner id",
+            "example": "64a92fe68594a3ed540ff468"
+          },
+          "lessons": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Lesson id",
+                "example": "awa0w8da0987mn098n"
+              }
+            }
+          }
+        }
+      },
+      "UpdateCourseRes": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Course id",
+            "example": "64a92fe68594a3ed540ff468"
+          },
+          "title": {
+            "type": "string",
+            "description": "Course title",
+            "example": "English for beginners"
+          },
+          "description": {
+            "type": "string",
+            "description": "Course description",
+            "example": "Dummy course for beginners"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Course owner id",
+            "example": "64a92fe68594a3ed540ff468"
+          },
+          "lessons": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Lesson id",
+                "example": "awa0w8da0987mn098n"
+              }
+            }
+          }
+        }
+      },
+      "UpdateCourseReq": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Course title",
+            "example": "English for beginners"
+          },
+          "description": {
+            "type": "string",
+            "description": "Course description",
+            "example": "Dummy course for beginners"
+          }
+        }
+      },
+      "LessonsForCourse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Lesson id",
+              "example": "64a92fe68594a3ed540ff468"
+            },
+            "title": {
+              "type": "string",
+              "description": "Lesson title",
+              "example": "English for beginners"
+            },
+            "content": {
+              "type": "string",
+              "description": "Lesson content",
+              "example": "Dummy course for beginners"
+            }
+          }
+        }
+      },
+      "UsersForCourse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Lesson id",
+              "example": "64a92fe68594a3ed540ff468"
+            },
+            "title": {
+              "type": "string",
+              "description": "Lesson title",
+              "example": "English for beginners"
+            },
+            "content": {
+              "type": "string",
+              "description": "Lesson content",
+              "example": "Dummy course for beginners"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
